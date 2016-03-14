@@ -3,7 +3,8 @@ var App = function (server) {
 };
 
 App.prototype.init = function () {
-
+  $('.username').on('click', this.addFriend);
+  $('#send .submit').on('submit', this.handleSubmit);
 };
 
 App.prototype.send = function (message) {
@@ -51,12 +52,28 @@ App.prototype.clearMessages = function() {
 };
 
 App.prototype.addMessage = function(message) {
-  $('#chats').append('<div> ' + message.text + '</div>');
+  $('#chats').append('<div>' + message.text + '</div>');
+
+  //if (!$('#main').find('.username:contains("' + message.username + '")')) {
+  $('#main').append('<div class="username">' + message.username + '</div>');
+  //}
+
+};
+
+App.prototype.addFriend = function() {
+  console.log('addFriend');
 };
 
 App.prototype.addRoom = function(chatroom) {
   $('#roomSelect').append('<div> ' + chatroom + '</div>');
 };
+
+App.prototype.handleSubmit = function() {
+  //debugger;
+  
+  
+};
+
 
 
 var app = new App('https://api.parse.com/1/classes/messages');
