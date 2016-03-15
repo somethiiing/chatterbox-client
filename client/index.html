@@ -14,16 +14,15 @@
     <script src="scripts/app.js"></script>
   </head>
   <body>
-    <div id="main">
-      <h1>chatterbox</h1>
-      <div class="participants">
-      </div>
-      <!-- Your HTML goes here! -->
-    </div>
-    <div id="chats">#chats</div>
+    <h1>chatterbox</h1>
+    <div class="participants">Participants</div>
+    
     <div id="send" action="">
     <input type="text" id="message" />
-    <button class=".submit">Send Message</button>
+    <button class=".submit" onClick="app.handleSubmit()">Send Message</button>
+    <button class="reload" onClick="app.init()">Load New Messages!</buttom>
     </div>
+
+    <div id="chats">#chats</div>
   </body>
 </html>

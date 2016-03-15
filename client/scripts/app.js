@@ -72,8 +72,8 @@ App.prototype.clearMessages = function() {
 App.prototype.addMessage = function(message) {
   $('#chats').append('<div>' + 
     '<span class="timestamp">' + timeStamp(message.createdAt) + '</span>' + 
-    '<span class="username">' + sanitize(message.username) + '</span>: ' + 
-    '<span class="messagetext">' + sanitize(message.text) + '</span>' + 
+    '<span class="username">' + escapeHtml(message.username) + '</span>: ' + 
+    '<span class="messagetext">' + escapeHtml(message.text) + '</span>' + 
     '</div>');
 
   //if (!$('#main').find('.username:contains('' + message.username + '')')) {
@@ -90,45 +90,29 @@ App.prototype.addRoom = function(chatroom) {
   $('#roomSelect').append('<div> ' + chatroom + '</div>');
 };
 
-App.prototype.handleSubmit = function(event) {
+App.prototype.handleSubmit = function() {
   var message = {
     username: this.username,
     text: $('#message').val(),
-    roomname: 'lobby'    
+    roomname: 'lobby'
   };
 
   this.send(message);
 };
 
-var sanitizeDict = [
-['&', '38'],
-['<', '60'],
-['>', '62'],
-['"', '34'],
-['\'', '39'],
-['`', '96'],
-[' ', '32'],
-['!', '33'],
-[',', '44'],
-['@', '64'],
-['$', '36'],
-['%', '37'],
-['(', '40'],
-[')', '41'],
-['=', '61'],
-['+', '43'],
-['{', '123'],
-['}', '125'],
-['[', '91'],
-[']', '92']
-];
+ var entityMap = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': '&quot;',
+    "'": '&#39;',
+    "/": '&#x2F;'
+  };
 
-var sanitize = function(str) {
-  debugger;
-  for (var i = 0; i < sanitizeDict.length; i++) {
-    str = str.replace(sanitizeDict[i][0], '&#' + sanitizeDict[i][1] + ';');
-  }
-  return str;
+var escapeHtml = function(string) {
+      return String(string).replace(/[&<>"'\/]/g, function (s) {
+        return entityMap[s];
+    });
 };
 
 var timeStamp = function(inputDate) {
@@ -167,6 +151,9 @@ var timeStamp = function(inputDate) {
 
 
 var app = new App('https://api.parse.com/1/classes/messages');
-setInterval(function() {
-  app.init(); 
-}, 1500);
+
+// setInterval(function() {
+//   app.init(); 
+// }, 1500);
+
+app.init();
